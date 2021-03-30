@@ -1,0 +1,48 @@
+quarkus:
+  http:
+    port: 8080
+    root-path: /api
+    non-application-root-path: /q
+  log:
+    level: INFO
+    console:
+      #format: "%d{yyyy-MM-dd HH:mm:ss} %-5p traceId=%X{traceId}, parentId=%X{parentId}, spanId=%X{spanId}, sampled=%X{sampled} [%c{2.}] (%t) %s%e%n"
+      format: "%d{yyyy-MM-dd HH:mm:ss} %-5p traceId=%X{traceId}, spanId=%X{spanId}, [%c{5.}] (%t) %s%e%n"
+  hibernate-orm:
+    log:
+      sql: true
+  smallrye-openapi:
+    path: openapi
+  application:
+    version: 1.0.0
+
+
+
+#quarkus.resteasy.path: /api
+#quarkus.servlet.context-path: /api
+
+"%local":
+  quarkus:
+    datasource:
+      db-kind: postgresql
+      jdbc:
+        url: jdbc:postgresql://localhost:5432/postgres
+        driver: org.postgresql.Driver
+      username: postgres
+      password: mysecretpassword
+
+"%dev":
+  quarkus:
+    datasource:
+      db-kind: postgresql
+      jdbc:
+        url: jdbc:postgresql://aldolushkja.it:54322/quarkusdemo
+        driver: org.postgresql.Driver
+      username: quarkus_demo_user
+      password: quarkus_test_2021
+
+display:
+  mach: 3
+  unit:
+    name: "mph"
+    factor: 2.23694
