@@ -1,4 +1,4 @@
-package it.jump3.enumz;
+package it.jump3.util;
 
 import java.util.Arrays;
 import java.util.List;
@@ -10,4 +10,6 @@ public class EnvironmentConstants {
         public static final String HEADER_USERNAME = "X-USERNAME";
         public static final String SOURCE_SYSTEM_HEADER = "X-SOURCESYSTEM";
     }
+
+    public static final String USER_INFO_KEY = "userInfo";
 }

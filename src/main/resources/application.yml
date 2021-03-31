@@ -23,6 +23,23 @@ quarkus:
     username: ${USERNAME_DB}
     password: ${PASSWORD_DB}
 
+mp:
+  jwt:
+    verify:
+      issuer: ${ISSUER_JWT}
+      publickey:
+        location: META-INF/resources/publicKey.pem
+smallrye:
+  jwt:
+    sign:
+      key-location: META-INF/resources/privateKey.pem
+
+jwt:
+  issuer: ${ISSUER_JWT}
+  secret: ${SECRET_JWT}
+  expiration:
+    time:
+      minutes: 10
 
 #quarkus.resteasy.path: /api
 #quarkus.servlet.context-path: /api

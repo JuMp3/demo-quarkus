@@ -4,7 +4,6 @@ import io.quarkus.panache.common.Sort;
 import io.smallrye.common.constraint.Assert;
 import io.vertx.core.http.HttpServerRequest;
 import it.jump3.controller.model.PaginatedResponse;
-import it.jump3.enumz.EnvironmentConstants;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;

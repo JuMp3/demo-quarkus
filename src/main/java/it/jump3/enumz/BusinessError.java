@@ -14,7 +14,9 @@ public enum BusinessError {
 
     IB_400_USER(4001),
     IB_404_USER(4041),
-    IB_409_USER(4091);
+    IB_409_USER(4091),
+
+    IB_500_JWT(5001);
 
     private final int code;
 

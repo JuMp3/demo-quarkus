@@ -1,18 +1,20 @@
 //package it.jump3.config;
 //
-//import it.jump3.enumz.EnvironmentConstants;
+//import it.jump3.util.EnvironmentConstants;
 //import it.jump3.util.HeaderData;
 //import it.jump3.util.Utility;
 //
+//import javax.enterprise.context.Dependent;
 //import javax.enterprise.context.RequestScoped;
 //import javax.enterprise.inject.Produces;
 //import javax.servlet.http.HttpServletRequest;
 //import javax.ws.rs.core.Context;
 //
-//@RequestScoped
+//@Dependent
 //public class Producers {
 //
 //    @Produces
+//    @RequestScoped
 //    HeaderData produceHeaderData(@Context HttpServletRequest request) {
 //
 //        HeaderData headerData = new HeaderData();
