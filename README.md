@@ -77,3 +77,23 @@ The Quarkus configuration location is `src/main/resources/application.yml`.
 This example demonstrate RESTEasy JSON serialisation by letting you list, add and remove quark types from a list. Quarked!
 
 [Related guide section...](https://quarkus.io/guides/rest-json#creating-your-first-json-rest-service)
+
+### Use Servlet
+
+For user Servlet, you must be add the quarkus-undertow dependency
+
+    <dependency>
+        <groupId>io.quarkus</groupId>
+        <artifactId>quarkus-undertow</artifactId>
+    </dependency>
+            
+ After, you can use inject servlet object with the @Context annotation, that allows you to inject instances of
+
+    javax.ws.rs.core.HttpHeaders
+    javax.ws.rs.core.UriInfo
+    javax.ws.rs.core.Request
+    javax.servlet.http.HttpServletRequest
+    javax.servlet.http.HttpServletResponse
+    javax.servlet.ServletConfig
+    javax.servlet.ServletContext
+    javax.ws.rs.core.SecurityContext

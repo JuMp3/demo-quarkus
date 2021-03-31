@@ -2,13 +2,17 @@ package it.jump3.util;
 
 import io.quarkus.panache.common.Sort;
 import io.smallrye.common.constraint.Assert;
+import io.vertx.core.http.HttpServerRequest;
 import it.jump3.controller.model.PaginatedResponse;
+import it.jump3.enumz.EnvironmentConstants;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.utils.URLEncodedUtils;
+import org.jboss.resteasy.spi.HttpRequest;
 
+import javax.servlet.http.HttpServletRequest;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
@@ -217,6 +221,43 @@ public class Utility {
         return !CollectionUtils.isEmpty(set) ? set.toString() : null;
     }
 
+    public static String getIpClient(HttpServletRequest request) {
+        String remoteAddr = EnvironmentConstants.Headers.IP_HEADERS.stream()
+                .map(request::getHeader)
+                .filter(Objects::nonNull)
+                .filter(ip -> !ip.isEmpty() && !ip.equalsIgnoreCase("unknown"))
+                .findFirst()
+                .orElse(request.getRemoteAddr().split(",")[0]);
+        return evaluateIpClient(remoteAddr);
+    }
+
+    public static String getIpClient(HttpRequest request) {
+        List<String> headers = new ArrayList<>();
+        request.getHttpHeaders().getRequestHeaders().forEach((k, v) -> {
+            if (EnvironmentConstants.Headers.IP_HEADERS.contains(k)) {
+                headers.addAll(v);
+            }
+        });
+        String remoteAddr = headers.stream()
+                .filter(Objects::nonNull)
+                .filter(ip -> !ip.isEmpty() && !ip.equalsIgnoreCase("unknown"))
+                .findFirst()
+                .orElse(request.getRemoteAddress().split(",")[0]);
+        return evaluateIpClient(remoteAddr);
+    }
+
+    public static HeaderData headerData(HttpRequest request, HttpServerRequest httpServerRequest) {
+        HeaderData headerData = new HeaderData();
+        headerData.setIpClient(Utility.getIpClient(request));
+        headerData.setPort(httpServerRequest.remoteAddress().port());
+        headerData.setUsername(request.getHttpHeaders().getHeaderString(EnvironmentConstants.Headers.HEADER_USERNAME));
+        return headerData;
+    }
+
+    public static String evaluateIpClient(String ipClient) {
+        return StringUtils.isEmpty(ipClient) ? "::1" : ipClient;
+    }
+
     public static void setPaginatedResponse(PaginatedResponse response, Long count, Integer size) {
         int totalPages = getTotalPages(count, size);
         response.setTotalPages(totalPages);
@@ -265,5 +306,27 @@ public class Utility {
         }
 
         return sort;
+    }
+
+    public static String localeToString(Locale l) {
+        return l.getLanguage() + "," + l.getCountry();
+    }
+
+    public static Locale stringToLocale(String s) {
+        if (StringUtils.isNotEmpty(s)) {
+            StringTokenizer tempStringTokenizer = new StringTokenizer(s, ",");
+            String l, c;
+            if (tempStringTokenizer.hasMoreTokens()) {
+                l = tempStringTokenizer.nextToken();
+                if (tempStringTokenizer.hasMoreTokens()) {
+                    c = tempStringTokenizer.nextToken();
+                    return new Locale(l, c);
+                } else {
+                    return new Locale(l);
+                }
+            }
+            //return LocaleUtils.toLocale(s);
+        }
+        return null;
     }
 }
