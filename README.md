@@ -1,4 +1,4 @@
-# demo-quarkus project
+# demo-quarkus project 
 
 This project uses Quarkus, the Supersonic Subatomic Java Framework.
 
@@ -9,6 +9,19 @@ If you want to learn more about Quarkus, please visit its website: https://quark
 You can run your application in dev mode that enables live coding using:
 ```shell script
 ./mvnw compile quarkus:dev
+```
+
+> **_NOTE:_** Environment variables have been configured in the application.yml file.
+>In order to run the application, **you need to create the *.env* file** in the current root working directory ([doc](https://www.oreilly.com/library/view/quarkus-cookbook/9781492062646/ch04.html)),
+>with the ENV var; example:
+>
+>URL_DB=hostname:port/postgres <br />
+ USERNAME_DB=postgres <br />
+ PASSWORD_DB=******** <br />
+
+For set custom profile, use:
+```shell script
+./mvnw -Dquarkus.profile=staging compile quarkus:dev
 ```
 
 > **_NOTE:_**  Quarkus now ships with a Dev UI, which is available in dev mode only at http://localhost:8080/q/dev/.

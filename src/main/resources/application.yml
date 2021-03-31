@@ -15,7 +15,13 @@ quarkus:
     path: openapi
   application:
     version: 1.0.0
-
+  datasource:
+    db-kind: postgresql
+    jdbc:
+      url: jdbc:postgresql://${URL_DB}
+      driver: org.postgresql.Driver
+    username: ${USERNAME_DB}
+    password: ${PASSWORD_DB}
 
 
 #quarkus.resteasy.path: /api
@@ -31,15 +37,10 @@ quarkus:
       username: postgres
       password: mysecretpassword
 
-"%dev":
-  quarkus:
-    datasource:
-      db-kind: postgresql
-      jdbc:
-        url: jdbc:postgresql://aldolushkja.it:54322/quarkusdemo
-        driver: org.postgresql.Driver
-      username: quarkus_demo_user
-      password: quarkus_test_2021
+#"%dev":
+#  quarkus:
+#    http:
+#      port: 8081
 
 display:
   mach: 3
