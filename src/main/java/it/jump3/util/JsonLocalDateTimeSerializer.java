@@ -11,6 +11,6 @@ public class JsonLocalDateTimeSerializer extends JsonSerializer<LocalDateTime> {
 
     @Override
     public void serialize(LocalDateTime localDateTime, JsonGenerator gen, SerializerProvider provider) throws IOException {
-        gen.writeString(DateUtil.getFromLocalDateTimeDefault(localDateTime));
+        gen.writeString(DateUtil.getFromLocalDateTimeFe(localDateTime));
     }
 }

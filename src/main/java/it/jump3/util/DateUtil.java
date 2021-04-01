@@ -263,4 +263,21 @@ public class DateUtil {
     public static LocalDateTime convertInUTC(LocalDateTime localDateTime, Locale locale) {
         return localDateTime.atZone(getZoneIdFromLocale(locale)).withZoneSameInstant(ZoneOffset.UTC).toLocalDateTime();
     }
+
+    public static Date plusMinutes(Date date, int minutes) {
+        int oneMinuteInMillis = 60000;
+        return new Date(date.getTime() + (minutes * oneMinuteInMillis));
+    }
+
+    public static Date currentTimeInDate() {
+        Calendar calendar = Calendar.getInstance();
+        return new Date(calendar.getTimeInMillis());
+    }
+
+    public static int currentTimeInSecs() {
+        //long currentTimeMS = System.currentTimeMillis();
+        //return (int) (currentTimeMS / 1000);
+        Calendar calendar = Calendar.getInstance();
+        return (int) calendar.getTimeInMillis() / 1000;
+    }
 }

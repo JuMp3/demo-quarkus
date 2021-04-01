@@ -14,15 +14,13 @@ import it.jump3.util.Utility;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.collections.CollectionUtils;
+import org.eclipse.microprofile.faulttolerance.Fallback;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.transaction.Transactional;
 import javax.ws.rs.core.Response;
 import java.lang.reflect.InvocationTargetException;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.*;
 
 @ApplicationScoped
 @Slf4j
@@ -56,6 +54,7 @@ public class UserRepository implements PanacheRepositoryBase<User, String> {
         return this.findById(username);
     }
 
+    @Fallback(fallbackMethod = "findUsersFallback")
     public UserResponse findUsers(Page page, Sort sort) {
 
         Set<UserDto> users = new TreeSet<>();
@@ -77,6 +76,17 @@ public class UserRepository implements PanacheRepositoryBase<User, String> {
         UserResponse userResponse = new UserResponse();
         userResponse.setUsers(users);
         Utility.setPaginatedResponse(userResponse, count, page.size);
+
+        return userResponse;
+    }
+
+    public UserResponse findUsersFallback(Page page, Sort sort) {
+
+        log.warn("findUsersFallback call...");
+
+        UserResponse userResponse = new UserResponse();
+        userResponse.setUsers(new HashSet<>());
+        Utility.setPaginatedResponse(userResponse, 0L, page.size);
 
         return userResponse;
     }

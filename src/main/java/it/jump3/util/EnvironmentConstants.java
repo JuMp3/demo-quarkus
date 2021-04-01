@@ -12,4 +12,5 @@ public class EnvironmentConstants {
     }
 
     public static final String USER_INFO_KEY = "userInfo";
+    public static final String AUTHORIZATION_HEADER_PREFIX = "Bearer ";
 }

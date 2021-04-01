@@ -22,17 +22,19 @@ quarkus:
       driver: org.postgresql.Driver
     username: ${USERNAME_DB}
     password: ${PASSWORD_DB}
+  smallrye-jwt:
+    enabled: true
 
-mp:
-  jwt:
-    verify:
-      issuer: ${ISSUER_JWT}
-      publickey:
-        location: META-INF/resources/publicKey.pem
-smallrye:
-  jwt:
-    sign:
-      key-location: META-INF/resources/privateKey.pem
+#mp:
+#  jwt:
+#    verify:
+#      issuer: ${ISSUER_JWT}
+#      publickey:
+#        location: publickey.pem
+#smallrye:
+#  jwt:
+#    sign:
+#      key-location: privatekey.pem
 
 jwt:
   issuer: ${ISSUER_JWT}

@@ -1,27 +1,22 @@
 package it.jump3.controller;
 
-import it.jump3.enumz.BusinessError;
-import it.jump3.exception.CommonBusinessException;
-import it.jump3.service.JwtAuth0TokenService;
-import it.jump3.service.JwtTokenService;
-import it.jump3.user.Role;
+import it.jump3.security.TokenProvider;
+import it.jump3.security.annotation.Secured;
+import it.jump3.security.profile.Role;
 import it.jump3.user.UserInfo;
-import it.jump3.util.EnvironmentConstants;
+import it.jump3.util.TokenUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.eclipse.microprofile.jwt.JsonWebToken;
 
-import javax.annotation.security.PermitAll;
-import javax.annotation.security.RolesAllowed;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
-import javax.ws.rs.CookieParam;
 import javax.ws.rs.GET;
+import javax.ws.rs.HeaderParam;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
+import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
 
 @Path("/login")
@@ -30,15 +25,9 @@ import javax.ws.rs.core.SecurityContext;
 public class LoginController {
 
     @Inject
-    JsonWebToken jwt;
+    TokenProvider tokenProvider;
 
-    @Inject
-    JwtTokenService jwtTokenService;
-
-    @Inject
-    JwtAuth0TokenService jwtAuth0TokenService;
-
-    @GET
+    /*@GET
     @Path("hi")
     @PermitAll
     @Produces(MediaType.APPLICATION_JSON)
@@ -61,23 +50,37 @@ public class LoginController {
         }
 
         return jwt;
+    }*/
+
+    @GET
+    @Path("jwt")
+    @Produces(MediaType.TEXT_PLAIN)
+    public String jwt() {
+        return tokenProvider.generateToken(initUserInfo());
     }
 
     @GET
-    @Path("jwt-auth0")
-    @PermitAll
+    @Path("user-info")
+    @Secured({Role.EVERYONE})
     @Produces(MediaType.APPLICATION_JSON)
-    public String jwtAuth0(@CookieParam("jwt") String jwtCookie) {
+    public UserInfo getUser(@HeaderParam(HttpHeaders.AUTHORIZATION) String token) {
+        return tokenProvider.getUserInfoFromToken(TokenUtils.getToken(token));
+    }
 
-        String jwt = jwtCookie;
-        if (StringUtils.isEmpty(jwt)) {
-            jwt = jwtAuth0TokenService.generateToken(initUserInfo());
-        } else {
-            UserInfo userInfo = jwtAuth0TokenService.getUserInfoFromToken(jwt);
-            log.info(userInfo.toString());
-        }
+    @GET
+    @Path("user")
+    @Secured({Role.USER})
+    @Produces(MediaType.APPLICATION_JSON)
+    public UserInfo getUser(@Context SecurityContext securityContext) {
+        return (UserInfo) securityContext.getUserPrincipal();
+    }
 
-        return jwt;
+    @GET
+    @Path("admin")
+    @Secured({Role.ADMIN})
+    @Produces(MediaType.APPLICATION_JSON)
+    public UserInfo getAdmin(@Context SecurityContext securityContext) {
+        return (UserInfo) securityContext.getUserPrincipal();
     }
 
     private UserInfo initUserInfo() {
@@ -86,14 +89,14 @@ public class LoginController {
         userInfo.setSurname("Quarkus");
         userInfo.setEmail("test.quarkus@eu.it");
         userInfo.setUsername("tquarkus");
-        userInfo.getRoles().add(Role.ADMIN);
+        userInfo.getRoles().add(Role.ADMIN.name());
         return userInfo;
     }
 
-    @GET
+    /*@GET
     @Path("user-info")
     @RolesAllowed({Role.ADMIN, Role.USER})
-    @Produces(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.APPLICATION_JSON)
     public UserInfo helloRolesAllowed(@Context SecurityContext ctx) {
         log.info(getResponseString(ctx));
         return jwt.getClaim(EnvironmentConstants.USER_INFO_KEY);
@@ -109,7 +112,7 @@ public class LoginController {
         } else {
             name = ctx.getUserPrincipal().getName();
         }
-        return String.format("hello + %s,"
+        return String.format("hello_ %s,"
                         + " isHttps: %s,"
                         + " authScheme: %s,"
                         + " hasJWT: %s",
@@ -118,5 +121,5 @@ public class LoginController {
 
     private boolean hasJwt() {
         return jwt.getClaimNames() != null;
-    }
+    }*/
 }
