@@ -1,12 +1,14 @@
 package it.jump3.controller;
 
+import io.vertx.core.http.HttpServerRequest;
+import it.jump3.annotation.Trace;
 import it.jump3.security.TokenProvider;
 import it.jump3.security.annotation.Secured;
 import it.jump3.security.profile.Role;
 import it.jump3.user.UserInfo;
 import it.jump3.util.TokenUtils;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
+import org.jboss.resteasy.spi.HttpRequest;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
@@ -59,11 +61,15 @@ public class LoginController {
         return tokenProvider.generateToken(initUserInfo());
     }
 
+    @Trace
     @GET
     @Path("user-info")
     @Secured({Role.EVERYONE})
     @Produces(MediaType.APPLICATION_JSON)
-    public UserInfo getUser(@HeaderParam(HttpHeaders.AUTHORIZATION) String token) {
+    public UserInfo getUser(@HeaderParam(HttpHeaders.AUTHORIZATION) String token,
+                            @Context SecurityContext securityContext,
+                            @Context HttpRequest httpRequest,
+                            @Context HttpServerRequest httpServerRequest) {
         return tokenProvider.getUserInfoFromToken(TokenUtils.getToken(token));
     }
 

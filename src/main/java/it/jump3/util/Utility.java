@@ -4,14 +4,17 @@ import io.quarkus.panache.common.Sort;
 import io.smallrye.common.constraint.Assert;
 import io.vertx.core.http.HttpServerRequest;
 import it.jump3.controller.model.PaginatedResponse;
+import it.jump3.user.UserInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.utils.URLEncodedUtils;
 import org.jboss.resteasy.spi.HttpRequest;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.core.SecurityContext;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
@@ -245,12 +248,26 @@ public class Utility {
         return evaluateIpClient(remoteAddr);
     }
 
-    public static HeaderData headerData(HttpRequest request, HttpServerRequest httpServerRequest) {
+    public static HeaderData headerData(HttpRequest request, HttpServerRequest httpServerRequest, SecurityContext securityContext) {
         HeaderData headerData = new HeaderData();
         headerData.setIpClient(Utility.getIpClient(request));
         headerData.setPort(httpServerRequest.remoteAddress().port());
-        headerData.setUsername(request.getHttpHeaders().getHeaderString(EnvironmentConstants.Headers.HEADER_USERNAME));
+        //headerData.setUsername(request.getHttpHeaders().getHeaderString(EnvironmentConstants.Headers.HEADER_USERNAME));
+        headerData.setUsername(getUsername(securityContext));
         return headerData;
+    }
+
+    public static String getUsername(SecurityContext securityContext) {
+
+        String username = null;
+
+        if (securityContext != null) {
+            if (securityContext.getUserPrincipal() != null && securityContext.getUserPrincipal() instanceof UserInfo &&
+                    !ObjectUtils.isEmpty(((UserInfo) securityContext.getUserPrincipal()).getUsername())) {
+                username = ((UserInfo) securityContext.getUserPrincipal()).getUsername();
+            }
+        }
+        return username;
     }
 
     public static String evaluateIpClient(String ipClient) {

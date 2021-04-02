@@ -8,11 +8,13 @@ import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 import org.jboss.resteasy.spi.HttpRequest;
 
+import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.SecurityContext;
 import java.math.BigDecimal;
 import java.util.Locale;
 import java.util.Optional;
@@ -56,23 +58,16 @@ public class ConfigResource {
     }
 
     @GET
-    @Path("ip")
+    @Path("header-data")
     @Produces(MediaType.APPLICATION_JSON)
-    public HeaderData ip(@Context HttpRequest req) {
-        return Utility.headerData(req, request);
+    public HeaderData headerData(@Context HttpRequest req, @Context SecurityContext securityContext) {
+        return Utility.headerData(req, request, securityContext);
     }
 
     @GET
     @Path("lang")
     @Produces(MediaType.APPLICATION_JSON)
-    public Locale ip(@Context HttpServerRequest request) {
+    public Locale lang() {
         return Utility.stringToLocale(request.getHeader("Accept-language"));
     }
-
-//    @GET
-//    @Path("hd")
-//    @Produces(MediaType.APPLICATION_JSON)
-//    public HeaderData ip() {
-//        return headerData;
-//    }
 }
