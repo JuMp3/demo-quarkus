@@ -2,6 +2,7 @@ package it.jump3.user;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import it.jump3.security.profile.Role;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -26,5 +27,5 @@ public class UserInfo implements Serializable, Principal {
     private String name;
     private String surname;
     private String email;
-    private Set<String> roles = new HashSet<>();
+    private Set<Role> roles = new HashSet<>();
 }

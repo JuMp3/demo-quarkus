@@ -20,7 +20,7 @@ public class DateUtil {
     private DateTimeFormatter dateTimeFormatter;
     private SimpleDateFormat simpleDateFormat;
     private DateFormat dateFormat;
-    private static final String DATE_PATTERN = "yyyy-MM-dd'T'HH:mm:ss";
+    public static final String DATE_PATTERN = "yyyy-MM-dd'T'HH:mm:ss";
     private static final DateTimeFormatter dateTimeFormatterDefault = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
     private static final DateTimeFormatter dateTimeFormatterFe = DateTimeFormatter.ofPattern(DATE_PATTERN);
     private static final DateTimeFormatter dateTimeFormatTimestampDefault = DateTimeFormatter.ofPattern(DATE_PATTERN);

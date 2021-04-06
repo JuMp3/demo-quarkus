@@ -18,6 +18,8 @@ You can run your application in dev mode that enables live coding using:
 >URL_DB=hostname:port/postgres <br />
  USERNAME_DB=postgres <br />
  PASSWORD_DB=******** <br />
+ SECRET_JWT=***** <br />
+ ISSUER_JWT=quarkus-demo <br />
 
 For set custom profile, use:
 ```shell script

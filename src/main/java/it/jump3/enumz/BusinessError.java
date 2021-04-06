@@ -13,7 +13,15 @@ public enum BusinessError {
     IB_504(504),
 
     IB_400_USER(4001),
+    IB_400_ROLE(4002),
+
+    IB_401_PSW_WRONG(4011),
+
+    IB_403_USER_DISABLED(4031),
+
     IB_404_USER(4041),
+    IB_404_ROLE(4042),
+
     IB_409_USER(4091),
 
     IB_500_JWT(5001);

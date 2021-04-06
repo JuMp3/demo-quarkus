@@ -1,9 +1,13 @@
 package it.jump3.controller;
 
 import io.quarkus.panache.common.Page;
+import it.jump3.annotation.Trace;
 import it.jump3.controller.model.UserDto;
 import it.jump3.controller.model.UserResponse;
-import it.jump3.dao.repository.UserRepository;
+import it.jump3.security.annotation.Secured;
+import it.jump3.security.profile.Role;
+import it.jump3.service.UserService;
+import it.jump3.util.CustomValidation;
 import it.jump3.util.Utility;
 import lombok.extern.slf4j.Slf4j;
 import org.eclipse.microprofile.openapi.annotations.parameters.RequestBody;
@@ -13,7 +17,6 @@ import org.jboss.resteasy.annotations.jaxrs.QueryParam;
 
 import javax.inject.Inject;
 import javax.validation.Valid;
-import javax.validation.Validator;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.lang.reflect.InvocationTargetException;
@@ -27,10 +30,13 @@ import java.lang.reflect.InvocationTargetException;
 public class UserController {
 
     @Inject
-    UserRepository userRepository;
+    UserService userService;
 
     @Inject
-    Validator validator;
+    CustomValidation customValidation;
+
+    //@Inject
+    //Validator validator;
 
     @GET
     @Path("/{page}/{size}")
@@ -39,12 +45,13 @@ public class UserController {
                              @QueryParam("sort") String sortQuery) {
 
         log.info("**** START -> getUser ****");
-        UserResponse users = userRepository.findUsers(Page.of(page, size), Utility.getSortFromQuery(sortQuery));
+        UserResponse users = userService.findUsers(Page.of(page, size), Utility.getSortFromQuery(sortQuery));
         log.info("**** END -> getUser ****");
 
         return users;
     }
 
+    @Trace
     @POST
     public void create(@RequestBody @Valid UserDto userDto) throws InvocationTargetException, IllegalAccessException {
 
@@ -55,16 +62,19 @@ public class UserController {
         }*/
 
         log.info("**** START -> create ****");
-        userRepository.newUser(userDto);
+        customValidation.customCheck(userDto);
+        userService.newUser(userDto);
         log.info("**** END -> create ****");
     }
 
+    @Trace
     @DELETE
+    @Secured({Role.ADMIN})
     @Path("/{username}")
     public void delete(@PathParam("username") String username) {
 
         log.info("**** START -> delete ****");
-        userRepository.deleteUser(username);
+        userService.deleteUser(username);
         log.info("**** END -> delete ****");
     }
 }

@@ -2,24 +2,25 @@ package it.jump3.controller;
 
 import io.vertx.core.http.HttpServerRequest;
 import it.jump3.annotation.Trace;
-import it.jump3.security.TokenProvider;
+import it.jump3.controller.model.LoginRequest;
 import it.jump3.security.annotation.Secured;
 import it.jump3.security.profile.Role;
+import it.jump3.service.LoginService;
 import it.jump3.user.UserInfo;
 import it.jump3.util.TokenUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.eclipse.microprofile.openapi.annotations.parameters.RequestBody;
 import org.jboss.resteasy.spi.HttpRequest;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
-import javax.ws.rs.GET;
-import javax.ws.rs.HeaderParam;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
+import javax.validation.Valid;
+import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.SecurityContext;
+import java.lang.reflect.InvocationTargetException;
 
 @Path("/login")
 @RequestScoped
@@ -27,7 +28,7 @@ import javax.ws.rs.core.SecurityContext;
 public class LoginController {
 
     @Inject
-    TokenProvider tokenProvider;
+    LoginService loginService;
 
     /*@GET
     @Path("hi")
@@ -54,11 +55,12 @@ public class LoginController {
         return jwt;
     }*/
 
-    @GET
-    @Path("jwt")
-    @Produces(MediaType.TEXT_PLAIN)
-    public String jwt() {
-        return tokenProvider.generateToken(initUserInfo());
+    @Trace
+    @POST
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public String login(@RequestBody @Valid LoginRequest loginRequest) throws InvocationTargetException, IllegalAccessException {
+        return loginService.login(loginRequest);
     }
 
     @Trace
@@ -70,7 +72,8 @@ public class LoginController {
                             @Context SecurityContext securityContext,
                             @Context HttpRequest httpRequest,
                             @Context HttpServerRequest httpServerRequest) {
-        return tokenProvider.getUserInfoFromToken(TokenUtils.getToken(token));
+        return (UserInfo) securityContext.getUserPrincipal();
+        //return loginService.getUserInfoFromToken(token);
     }
 
     @GET
@@ -87,16 +90,6 @@ public class LoginController {
     @Produces(MediaType.APPLICATION_JSON)
     public UserInfo getAdmin(@Context SecurityContext securityContext) {
         return (UserInfo) securityContext.getUserPrincipal();
-    }
-
-    private UserInfo initUserInfo() {
-        UserInfo userInfo = new UserInfo();
-        userInfo.setName("Test");
-        userInfo.setSurname("Quarkus");
-        userInfo.setEmail("test.quarkus@eu.it");
-        userInfo.setUsername("tquarkus");
-        userInfo.getRoles().add(Role.ADMIN.name());
-        return userInfo;
     }
 
     /*@GET

@@ -74,9 +74,13 @@ public class JwtTokenProvider implements TokenProvider {
         return claim.asArray(Role.class);
     }
 
-    private static String[] toArrayNames(Set<String> roles) {
+    private static String[] toArrayNames(Set<Role> roles) {
         String[] rolesArray = new String[roles.size()];
-        roles.toArray(rolesArray);
+        //roles.toArray(rolesArray);
+        int idx = -1;
+        for (Role role : roles) {
+            rolesArray[++idx] = role.name();
+        }
         return rolesArray;
     }
 

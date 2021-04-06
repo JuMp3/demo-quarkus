@@ -22,8 +22,8 @@ quarkus:
       driver: org.postgresql.Driver
     username: ${USERNAME_DB}
     password: ${PASSWORD_DB}
-  smallrye-jwt:
-    enabled: true
+#  smallrye-jwt:
+#    enabled: true
 
 #mp:
 #  jwt:

@@ -11,6 +11,8 @@ import org.eclipse.microprofile.openapi.annotations.media.Schema;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "USER_T", schema = "public")
@@ -29,11 +31,17 @@ public class User implements Serializable {
     @EqualsAndHashCode.Include
     private String username;
 
+    @Column(name = "PASSWORD", nullable = false)
+    private String password;
+
     @Column(name = "NAME", nullable = false)
     private String name;
 
     @Column(name = "SURNAME", nullable = false)
     private String surname;
+
+    @Column(name = "EMAIL")
+    private String email;
 
     @Column(name = "STATUS", nullable = false)
     @Enumerated(EnumType.STRING)
@@ -44,6 +52,14 @@ public class User implements Serializable {
 
     @Column(name = "UPDATE_TIME")
     private LocalDateTime updateTime;
+
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinTable(name = "ROLE_USER_T",
+            joinColumns = @JoinColumn(name = "USER_ID", referencedColumnName = "USERNAME"),
+            foreignKey = @ForeignKey(name = "FK_USER_ROLE"),
+            inverseJoinColumns = @JoinColumn(name = "ROLE_ID", referencedColumnName = "ID"),
+            inverseForeignKey = @ForeignKey(name = "FK_ROLE_USER"))
+    private Set<Role> roles = new HashSet<>();
 
     @Version
     private Long version;

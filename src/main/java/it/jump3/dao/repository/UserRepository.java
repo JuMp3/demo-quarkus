@@ -7,9 +7,7 @@ import it.jump3.controller.model.UserDto;
 import it.jump3.controller.model.UserResponse;
 import it.jump3.dao.model.User;
 import it.jump3.enumz.BusinessError;
-import it.jump3.enumz.UserStatusEnum;
 import it.jump3.exception.CommonBusinessException;
-import it.jump3.util.DateUtil;
 import it.jump3.util.Utility;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.beanutils.BeanUtils;
@@ -91,25 +89,8 @@ public class UserRepository implements PanacheRepositoryBase<User, String> {
         return userResponse;
     }
 
-    public void newUser(UserDto userDto) throws InvocationTargetException, IllegalAccessException {
-
-        User userToCheck = findByUsername(userDto.getUsername());
-        if (userToCheck != null) {
-            throw new CommonBusinessException(Integer.toString(BusinessError.IB_409_USER.code()),
-                    String.format("User with username %s yet exists", userDto.getUsername()), Response.Status.CONFLICT);
-        }
-
-        createUser(userDto);
-    }
-
     @Transactional
-    public void createUser(UserDto userDto) throws InvocationTargetException, IllegalAccessException {
-
-        User user = new User();
-        BeanUtils.copyProperties(user, userDto);
-        if (user.getInsertTime() == null) user.setInsertTime(DateUtil.nowLocalDateTimeItaly());
-        if (user.getStatus() == null) user.setStatus(UserStatusEnum.D);
-
+    public void save(User user) {
         this.persist(user);
     }
 }
