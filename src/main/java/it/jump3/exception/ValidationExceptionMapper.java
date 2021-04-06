@@ -2,6 +2,7 @@ package it.jump3.exception;
 
 import io.opentracing.Tracer;
 import io.vertx.core.http.HttpServerRequest;
+import it.jump3.config.ConfigService;
 import it.jump3.log.LogBuilder;
 import it.jump3.util.Utility;
 import lombok.extern.slf4j.Slf4j;
@@ -27,6 +28,9 @@ public class ValidationExceptionMapper implements ExceptionMapper<ConstraintViol
     @Inject
     Tracer tracer;
 
+    @Inject
+    ConfigService configService;
+
     @Context
     SecurityContext securityContext;
 
@@ -39,8 +43,6 @@ public class ValidationExceptionMapper implements ExceptionMapper<ConstraintViol
     @Context
     private ResourceInfo resourceInfo;
 
-    @ConfigProperty(name = "quarkus.log.level")
-    String logLevel;
 
     @Override
     public Response toResponse(ConstraintViolationException e) {
@@ -54,7 +56,7 @@ public class ValidationExceptionMapper implements ExceptionMapper<ConstraintViol
 
         LogBuilder.logExceptionDTO(log, resourceInfo, tracer,
                 Utility.headerData(httpRequest, httpServerRequest, securityContext),
-                logLevel, response);
+                configService.getLogLevel(), response);
 
         return response;
     }

@@ -5,6 +5,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Set;
 
 @EqualsAndHashCode(callSuper = true)
@@ -14,5 +15,5 @@ public class UserResponse extends PaginatedResponse implements Serializable {
 
     private static final long serialVersionUID = -6189389384500272650L;
 
-    private Set<UserDto> users;
+    private Set<UserDto> users = new HashSet<>();
 }

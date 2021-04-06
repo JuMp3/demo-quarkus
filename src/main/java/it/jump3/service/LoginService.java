@@ -42,8 +42,8 @@ public class LoginService {
         }
 
         if (!bCryptHashProvider.checkPassword(loginRequest.getPassword(), user.getPassword())) {
-            throw new CommonBusinessException(Integer.toString(BusinessError.IB_401_PSW_WRONG.code()),
-                    "Password wrong", Response.Status.UNAUTHORIZED);
+            throw new CommonBusinessException(Integer.toString(BusinessError.IB_401_WRONG_PSW.code()),
+                    "Wrong Password", Response.Status.UNAUTHORIZED);
         }
 
         if (UserStatusEnum.D.equals(user.getStatus())) {

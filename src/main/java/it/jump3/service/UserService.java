@@ -3,6 +3,7 @@ package it.jump3.service;
 import io.quarkus.panache.common.Page;
 import io.quarkus.panache.common.Sort;
 import it.jump3.controller.model.UserDto;
+import it.jump3.controller.model.UserFe;
 import it.jump3.controller.model.UserResponse;
 import it.jump3.dao.model.User;
 import it.jump3.dao.repository.RoleRepository;
@@ -36,7 +37,24 @@ public class UserService {
     @Inject
     BCryptHashProvider bCryptHashProvider;
 
-    public void newUser(UserDto userDto) throws InvocationTargetException, IllegalAccessException {
+
+    public UserFe getUser(String username) throws InvocationTargetException, IllegalAccessException {
+
+        User user = userRepository.findByUsername(username);
+        if (user == null) {
+            throw new CommonBusinessException(Integer.toString(BusinessError.IB_404_USER.code()),
+                    String.format("User with username %s not found", username), Response.Status.NOT_FOUND);
+        }
+
+        UserFe userFe = new UserFe();
+        BeanUtils.copyProperties(userFe, user);
+        userFe.setRoles(new HashSet<>());
+        user.getRoles().forEach(role -> userFe.getRoles().add(role.getCode().name()));
+
+        return userFe;
+    }
+
+    public User newUser(UserDto userDto) throws InvocationTargetException, IllegalAccessException {
 
         User userToCheck = userRepository.findByUsername(userDto.getUsername());
         if (userToCheck != null) {
@@ -44,11 +62,11 @@ public class UserService {
                     String.format("User with username %s yet exists", userDto.getUsername()), Response.Status.CONFLICT);
         }
 
-        createUser(userDto);
+        return createUser(userDto);
     }
 
     @Transactional
-    public void createUser(UserDto userDto) throws InvocationTargetException, IllegalAccessException {
+    public User createUser(UserDto userDto) throws InvocationTargetException, IllegalAccessException {
 
         User user = new User();
         BeanUtils.copyProperties(user, userDto);
@@ -67,6 +85,8 @@ public class UserService {
         }
 
         userRepository.save(user);
+
+        return user;
     }
 
     public UserResponse findUsers(Page page, Sort sort) {

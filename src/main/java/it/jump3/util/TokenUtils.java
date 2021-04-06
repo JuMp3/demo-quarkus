@@ -1,5 +1,10 @@
 package it.jump3.util;
 
+import it.jump3.enumz.BusinessError;
+import it.jump3.exception.CommonBusinessException;
+import org.apache.commons.lang3.StringUtils;
+
+import javax.ws.rs.core.Response;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
@@ -58,6 +63,10 @@ public class TokenUtils {
     }
 
     public static String getToken(String token) {
+        if (StringUtils.isEmpty(token)) {
+            throw new CommonBusinessException(Integer.toString(BusinessError.IB_400_EMPTY_TOKEN.code()),
+                    "Missing token", Response.Status.BAD_REQUEST);
+        }
         return token.replace(EnvironmentConstants.AUTHORIZATION_HEADER_PREFIX, "");
     }
 }

@@ -7,11 +7,11 @@ import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import it.jump3.config.ConfigService;
 import it.jump3.security.profile.Role;
 import it.jump3.user.UserInfo;
 import it.jump3.util.DateUtil;
 import it.jump3.util.EnvironmentConstants;
-import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -29,13 +29,11 @@ public class JwtTokenProvider implements TokenProvider {
     private final Algorithm algorithm;
     private final JWTVerifier jwtVerifier;
 
-    public JwtTokenProvider(@ConfigProperty(name = "jwt.issuer") String issuer,
-                            @ConfigProperty(name = "jwt.secret") String secret,
-                            @ConfigProperty(name = "jwt.expiration.time.minutes") Integer expirationTimeInMinutes) {
+    public JwtTokenProvider(ConfigService configService) {
 
-        this.issuer = issuer;
-        this.expirationTimeInMinutes = expirationTimeInMinutes;
-        this.algorithm = Algorithm.HMAC512(secret);
+        this.issuer = configService.getIssuer();
+        this.expirationTimeInMinutes = configService.getExpirationTimeInMinutes();
+        this.algorithm = Algorithm.HMAC512(configService.getSecret());
         this.jwtVerifier = JWT.require(algorithm).withIssuer(issuer).build();
     }
 

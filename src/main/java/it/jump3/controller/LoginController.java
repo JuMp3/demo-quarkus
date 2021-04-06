@@ -7,7 +7,6 @@ import it.jump3.security.annotation.Secured;
 import it.jump3.security.profile.Role;
 import it.jump3.service.LoginService;
 import it.jump3.user.UserInfo;
-import it.jump3.util.TokenUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.eclipse.microprofile.openapi.annotations.parameters.RequestBody;
 import org.jboss.resteasy.spi.HttpRequest;

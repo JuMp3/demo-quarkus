@@ -37,6 +37,7 @@ quarkus:
 #      key-location: privatekey.pem
 
 jwt:
+  service-token: ${SERVICE_TOKEN}
   issuer: ${ISSUER_JWT}
   secret: ${SECRET_JWT}
   expiration:

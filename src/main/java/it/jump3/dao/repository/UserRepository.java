@@ -83,7 +83,6 @@ public class UserRepository implements PanacheRepositoryBase<User, String> {
         log.warn("findUsersFallback call...");
 
         UserResponse userResponse = new UserResponse();
-        userResponse.setUsers(new HashSet<>());
         Utility.setPaginatedResponse(userResponse, 0L, page.size);
 
         return userResponse;

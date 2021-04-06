@@ -2,6 +2,7 @@ package it.jump3.exception;
 
 import io.opentracing.Tracer;
 import io.vertx.core.http.HttpServerRequest;
+import it.jump3.config.ConfigService;
 import it.jump3.log.LogBuilder;
 import it.jump3.util.Utility;
 import lombok.extern.slf4j.Slf4j;
@@ -23,6 +24,9 @@ public class CommonBusinessExceptionHandler implements ExceptionMapper<CommonBus
     @Inject
     Tracer tracer;
 
+    @Inject
+    ConfigService configService;
+
     @Context
     SecurityContext securityContext;
 
@@ -35,9 +39,6 @@ public class CommonBusinessExceptionHandler implements ExceptionMapper<CommonBus
     @Context
     private ResourceInfo resourceInfo;
 
-    @ConfigProperty(name = "quarkus.log.level")
-    String logLevel;
-
     @Override
     public Response toResponse(CommonBusinessException e) {
 
@@ -45,7 +46,7 @@ public class CommonBusinessExceptionHandler implements ExceptionMapper<CommonBus
         Response response = Response.status(e.getHttpStatus()).entity(errorResponse).build();
         LogBuilder.logExceptionDTO(log, resourceInfo, tracer,
                 Utility.headerData(httpRequest, httpServerRequest, securityContext),
-                logLevel, response);
+                configService.getLogLevel(), response);
 
         return response;
     }

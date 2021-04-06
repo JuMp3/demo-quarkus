@@ -5,10 +5,10 @@
 //import com.auth0.jwt.interfaces.DecodedJWT;
 //import com.fasterxml.jackson.core.type.TypeReference;
 //import com.fasterxml.jackson.databind.ObjectMapper;
+//import it.jump3.config.ConfigService;
 //import it.jump3.user.UserInfo;
 //import it.jump3.util.DateUtil;
 //import it.jump3.util.EnvironmentConstants;
-//import org.eclipse.microprofile.config.inject.ConfigProperty;
 //
 //import javax.enterprise.context.ApplicationScoped;
 //import javax.inject.Inject;
@@ -20,14 +20,8 @@
 //@ApplicationScoped
 //public class JwtAuth0TokenService {
 //
-//    @ConfigProperty(name = "jwt.issuer")
-//    String issuer;
-//
-//    @ConfigProperty(name = "jwt.secret")
-//    String secret;
-//
-//    @ConfigProperty(name = "jwt.expiration.time.minutes")
-//    Integer expirationTimeInMinutes;
+//    @Inject
+//    ConfigService configService;
 //
 //    @Inject
 //    ObjectMapper objectMapper;
@@ -47,16 +41,16 @@
 //                .withHeader(headerClaims)
 //                .withSubject(userInfo.getUsername())
 //                .withIssuedAt(now)
-//                .withExpiresAt(DateUtil.plusMinutes(now, expirationTimeInMinutes))
-//                .withIssuer(issuer)
+//                .withExpiresAt(DateUtil.plusMinutes(now, configService.getExpirationTimeInMinutes()))
+//                .withIssuer(configService.getIssuer())
 //                .withJWTId(jti)
 //                .withClaim(EnvironmentConstants.USER_INFO_KEY, userInfoDTOMap)
-//                .sign(Algorithm.HMAC512(secret));
+//                .sign(Algorithm.HMAC512(configService.getSecret()));
 //    }
 //
 //    private DecodedJWT getDecodedJWTFromToken(String jwt) {
 //        //return JWT.require(Algorithm.HMAC512(Base64.getDecoder().decode(secret)))
-//        return JWT.require(Algorithm.HMAC512(secret))
+//        return JWT.require(Algorithm.HMAC512(configService.getSecret()))
 //                .build()
 //                .verify(jwt);
 //    }

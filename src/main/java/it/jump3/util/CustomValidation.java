@@ -13,16 +13,18 @@ import javax.ws.rs.core.Response;
 public class CustomValidation {
 
     public void customCheck(UserDto userDto) {
+
         if (CollectionUtils.isEmpty(userDto.getRoles())) {
             throw new CommonBusinessException(Integer.toString(BusinessError.IB_400_ROLE.code()),
                     "Roles may not be empty", Response.Status.BAD_REQUEST);
         }
+
         for (String role : userDto.getRoles()) {
             try {
                 Role.valueOf(role);
             } catch (IllegalArgumentException e) {
                 throw new CommonBusinessException(Integer.toString(BusinessError.IB_400_ROLE.code()),
-                        String.format("Role %s wrong", role), Response.Status.BAD_REQUEST);
+                        String.format("Wrong role %s", role), Response.Status.BAD_REQUEST);
             }
         }
     }

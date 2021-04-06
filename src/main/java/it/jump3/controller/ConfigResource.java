@@ -1,6 +1,7 @@
 package it.jump3.controller;
 
 import io.vertx.core.http.HttpServerRequest;
+import it.jump3.config.ConfigService;
 import it.jump3.util.HeaderData;
 import it.jump3.util.Utility;
 import lombok.extern.slf4j.Slf4j;
@@ -24,17 +25,8 @@ import java.util.Optional;
 @Slf4j
 public class ConfigResource {
 
-    @ConfigProperty(name = "constant.speed-of-sound-in-meter-per-second", defaultValue = "343")
-    int speedOfSound;
-
-    @ConfigProperty(name = "display.mach")
-    Optional<Integer> displayMach;
-
-    @ConfigProperty(name = "display.unit.name")
-    String displayUnitName;
-
-    @ConfigProperty(name = "display.unit.factor")
-    BigDecimal displayUnitFactor;
+    @Inject
+    ConfigService configService;
 
     @Context
     HttpServerRequest request;
@@ -46,14 +38,14 @@ public class ConfigResource {
     @Path("supersonic")
     @Produces(MediaType.TEXT_PLAIN)
     public String supersonic() {
-        final int mach = displayMach.orElse(1);
-        final BigDecimal speed = BigDecimal.valueOf(speedOfSound)
-                .multiply(displayUnitFactor)
+        final int mach = configService.getDisplayMach().orElse(1);
+        final BigDecimal speed = BigDecimal.valueOf(configService.getSpeedOfSound())
+                .multiply(configService.getDisplayUnitFactor())
                 .multiply(BigDecimal.valueOf(mach));
         return String.format("Mach %d is %.3f %s",
                 mach,
                 speed,
-                displayUnitName
+                configService.getDisplayUnitName()
         );
     }
 

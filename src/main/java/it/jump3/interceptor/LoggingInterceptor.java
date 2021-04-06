@@ -3,13 +3,13 @@ package it.jump3.interceptor;
 import io.opentracing.Tracer;
 import io.vertx.core.http.HttpServerRequest;
 import it.jump3.annotation.Trace;
+import it.jump3.config.ConfigService;
 import it.jump3.log.LogBuilder;
 import it.jump3.util.HeaderData;
 import it.jump3.util.Utility;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.jboss.resteasy.spi.HttpRequest;
 
 import javax.annotation.Priority;
@@ -31,8 +31,8 @@ public class LoggingInterceptor implements Serializable {
     @Inject
     Tracer tracer;
 
-    @ConfigProperty(name = "quarkus.log.level")
-    String logLevel;
+    @Inject
+    ConfigService configService;
 
     @AroundInvoke
     Object logInvocation(InvocationContext context) throws Exception {
@@ -45,13 +45,13 @@ public class LoggingInterceptor implements Serializable {
                 contextInfo.getSecurityContext() != null) {
             // ...log before
             headerData = Utility.headerData(contextInfo.getHttpRequest(), contextInfo.getHttpServerRequest(), contextInfo.getSecurityContext());
-            LogBuilder.logStart(log, context, tracer, start, headerData, logLevel);
+            LogBuilder.logStart(log, context, tracer, start, headerData, configService.getLogLevel());
         }
 
         Object ret = context.proceed();
 
         // ...log after
-        LogBuilder.logEnd(log, context, tracer, start, headerData, ret, logLevel);
+        LogBuilder.logEnd(log, context, tracer, start, headerData, ret, configService.getLogLevel());
 
         return ret;
     }
