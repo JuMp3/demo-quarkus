@@ -37,4 +37,7 @@ public class ConfigService {
 
     @ConfigProperty(name = "jwt.expiration.time.minutes")
     Integer expirationTimeInMinutes;
+
+    @ConfigProperty(name = "bitly-token")
+    String bitlyToken;
 }

@@ -2,6 +2,7 @@ package it.jump3.controller;
 
 import io.vertx.core.http.HttpServerRequest;
 import it.jump3.annotation.Trace;
+import it.jump3.controller.model.GenericResponse;
 import it.jump3.controller.model.LoginRequest;
 import it.jump3.security.annotation.Secured;
 import it.jump3.security.profile.Role;
@@ -15,10 +16,7 @@ import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.validation.Valid;
 import javax.ws.rs.*;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.HttpHeaders;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.SecurityContext;
+import javax.ws.rs.core.*;
 import java.lang.reflect.InvocationTargetException;
 
 @Path("/login")
@@ -58,8 +56,13 @@ public class LoginController {
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public String login(@RequestBody @Valid LoginRequest loginRequest) throws InvocationTargetException, IllegalAccessException {
-        return loginService.login(loginRequest);
+    public Response login(@RequestBody @Valid LoginRequest loginRequest) throws InvocationTargetException, IllegalAccessException {
+
+        log.info("**** START -> login ****");
+        String token = loginService.login(loginRequest);
+        log.info("**** END -> login ****");
+
+        return Response.ok(new GenericResponse(token)).build();
     }
 
     @Trace

@@ -4,6 +4,7 @@ import io.quarkus.test.junit.QuarkusTest;
 import io.quarkus.test.junit.mockito.InjectMock;
 import it.jump3.dao.model.User;
 import it.jump3.dao.repository.UserRepository;
+import it.jump3.rest.model.CovidResponse;
 import org.junit.jupiter.api.*;
 import org.mockito.Mockito;
 
@@ -12,6 +13,7 @@ import javax.ws.rs.core.Response;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.Matchers.greaterThan;
 import static org.mockito.ArgumentMatchers.any;
 
 @QuarkusTest
@@ -41,5 +43,20 @@ public class QuarkusDemoTest {
 
         Mockito.when(mockUserRepository.findByUsername(any())).thenReturn(user);
         Assertions.assertEquals("test", mockUserRepository.findByUsername("pippo").getUsername());
+    }
+
+    @Test
+    @Order(3)
+    public void testRestClient() {
+        CovidResponse response = given().log().all()
+                .when().get("/covid/summary")
+                .then().log().body()
+                .statusCode(Response.Status.OK.getStatusCode())
+                //.body("Countries.size()", is(190));
+                //.body("Countries.size()", greaterThan(1));
+                .extract()
+                .as(CovidResponse.class);
+
+        Assertions.assertTrue(response.getCountries().size() > 2, "Countries wrong");
     }
 }

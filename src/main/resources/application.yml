@@ -35,6 +35,8 @@ covid-api/mp-rest/url: https://api.covid19api.com
 #covid-api/mp-rest/scope: javax.inject.Singleton
 #covid-api/mp-rest/hostnameVerifier: io.quarkus.restclient.NoopHostnameVerifier
 
+bitly-api/mp-rest/url: https://api-ssl.bitly.com
+
 #mp:
 #  jwt:
 #    verify:
@@ -45,6 +47,8 @@ covid-api/mp-rest/url: https://api.covid19api.com
 #  jwt:
 #    sign:
 #      key-location: privatekey.pem
+
+bitly-token: ${BITLY_TOKEN}
 
 jwt:
   service-token: ${SERVICE_TOKEN}
