@@ -52,6 +52,12 @@ public class UserRepository implements PanacheRepositoryBase<User, String> {
         return this.findById(username);
     }
 
+    public User findByUsernameFetch(String username) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("username", username);
+        return this.find("select u from User u join fetch u.roles r where u.username = :username", params).firstResult();
+    }
+
     @Fallback(fallbackMethod = "findUsersFallback")
     public UserResponse findUsers(Page page, Sort sort) {
 

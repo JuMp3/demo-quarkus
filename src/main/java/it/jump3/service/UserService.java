@@ -15,6 +15,7 @@ import it.jump3.security.profile.Role;
 import it.jump3.util.DateUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.beanutils.BeanUtils;
+import org.eclipse.microprofile.opentracing.Traced;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -24,6 +25,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.HashSet;
 import java.util.Optional;
 
+@Traced
 @ApplicationScoped
 @Slf4j
 public class UserService {
@@ -40,7 +42,7 @@ public class UserService {
 
     public UserFe getUser(String username) throws InvocationTargetException, IllegalAccessException {
 
-        User user = userRepository.findByUsername(username);
+        User user = userRepository.findByUsernameFetch(username);
         if (user == null) {
             throw new CommonBusinessException(Integer.toString(BusinessError.IB_404_USER.code()),
                     String.format("User with username %s not found", username), Response.Status.NOT_FOUND);

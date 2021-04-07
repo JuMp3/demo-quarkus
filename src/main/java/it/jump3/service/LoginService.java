@@ -35,7 +35,7 @@ public class LoginService {
 
     public String login(LoginRequest loginRequest) throws InvocationTargetException, IllegalAccessException {
 
-        User user = userRepository.findByUsername(loginRequest.getUsername());
+        User user = userRepository.findByUsernameFetch(loginRequest.getUsername());
         if (user == null) {
             throw new CommonBusinessException(Integer.toString(BusinessError.IB_404_USER.code()),
                     String.format("User %s not found", loginRequest.getUsername()), Response.Status.UNAUTHORIZED);

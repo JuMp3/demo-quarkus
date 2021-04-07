@@ -9,6 +9,7 @@ quarkus:
       #format: "%d{yyyy-MM-dd HH:mm:ss} %-5p traceId=%X{traceId}, parentId=%X{parentId}, spanId=%X{spanId}, sampled=%X{sampled} [%c{2.}] (%t) %s%e%n"
       format: "%d{yyyy-MM-dd HH:mm:ss} %-5p traceId=%X{traceId}, spanId=%X{spanId}, [%c{5.}] (%t) %s%e%n"
   hibernate-orm:
+    dialect: org.hibernate.dialect.PostgreSQLDialect
     log:
       sql: true
   smallrye-openapi:
@@ -18,12 +19,17 @@ quarkus:
   datasource:
     db-kind: postgresql
     jdbc:
-      url: jdbc:postgresql://${URL_DB}
-      driver: org.postgresql.Driver
+      url: jdbc:tracing:postgresql://${URL_DB}
+      #driver: org.postgresql.Driver
+      driver: io.opentracing.contrib.jdbc.TracingDriver
     username: ${USERNAME_DB}
     password: ${PASSWORD_DB}
 #  smallrye-jwt:
 #    enabled: true
+  jaeger:
+    service-name: quarkus-demo
+    sampler-type: const
+    sampler-param: 1
 
 #mp:
 #  jwt:

@@ -21,6 +21,11 @@ You can run your application in dev mode that enables live coding using:
  SECRET_JWT=***** <br />
  ISSUER_JWT=quarkus-demo <br />
 
+For tracing function, you have to run in local a Jaeger instance; you can use docker for this purpose:
+```shell script
+docker run --restart unless-stopped --name jaeger -d -p 5775:5775/udp -p 6831:6831/udp -p 6832:6832/udp -p 5778:5778 -p 16686:16686 -p 14268:14268 jaegertracing/all-in-one:latest
+```
+
 For set custom profile, use:
 ```shell script
 ./mvnw -Dquarkus.profile=staging compile quarkus:dev
