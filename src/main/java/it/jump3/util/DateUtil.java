@@ -76,11 +76,17 @@ public class DateUtil {
 
     /*public static void main(String[] args) throws ParseException {
 
-        Timestamp timestamp = getTimestampFromStringDefault("2020-11-25T12:06:29.375+02:00");
+        Timestamp timestamp = getTimestampFromStringDefault("2020-04-05T06:37:00Z");
         System.out.println(timestamp);
 
         String ts = getDateTimeFromTimestampDefault(timestamp);
         System.out.println(ts);
+
+        LocalDateTime ldt = getDateTimeFromStringFe("2020-04-05T06:37:00Z");
+        System.out.println(ldt);
+
+        String ldtString = getFromLocalDateTimeFe(ldt);
+        System.out.println(ldtString);
     }*/
 
     public static LocalDate getLocalDateFromStringDefault(String date) {

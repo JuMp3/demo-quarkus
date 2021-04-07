@@ -33,6 +33,25 @@ For set custom profile, use:
 
 > **_NOTE:_**  Quarkus now ships with a Dev UI, which is available in dev mode only at http://localhost:8080/q/dev/.
 
+### Features implemented
+For now, I have implemented the following features:
+- Web (RESTful API with Resteasy)
+- DB with Panache ORM (used PostgreSQL)
+- Fallback (quarkus-smallrye-fault-tolerance)
+- Health API
+- External config from YML file
+- OpenAPI 3.0 with Swagger-UI
+- Request validation
+- Use of Filters handle (equivalent Spring Aspect)
+- Log and tracing with Jaeger
+- JWY/custom authentication (with check roles)
+- Test (WIP), also for secured API
+- REST Client for call 3rd-party API
+
+Coming soon:
+- Use resteasy-multipart for upload file
+- i18n messages
+
 ## Packaging and running the application
 
 The application can be packaged using:
