@@ -40,4 +40,10 @@ public class ConfigService {
 
     @ConfigProperty(name = "bitly-token")
     String bitlyToken;
+
+    @ConfigProperty(name = "file.root-folder")
+    String rootFolder;
+
+    @ConfigProperty(name = "file.retention-days")
+    Integer retentionDays;
 }

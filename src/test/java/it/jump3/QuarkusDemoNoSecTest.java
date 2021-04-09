@@ -1,5 +1,7 @@
 package it.jump3;
 
+import io.quarkus.panache.common.Page;
+import io.quarkus.panache.common.Sort;
 import io.quarkus.test.junit.QuarkusTest;
 import io.quarkus.test.junit.mockito.InjectMock;
 import it.jump3.controller.model.UserDto;
@@ -37,7 +39,7 @@ public class QuarkusDemoNoSecTest {
     @Test
     public void testUsers403() {
 
-        Mockito.when(mockUserRepository.findUsers(any(), any())).thenReturn(getResponse());
+        Mockito.when(mockUserRepository.findUsers(any(Page.class), any(Sort.class))).thenReturn(getResponse());
 
         given()
                 .headers(HttpHeaders.AUTHORIZATION, generateUserToken())
@@ -50,7 +52,7 @@ public class QuarkusDemoNoSecTest {
     @Test
     public void testUsersOk() {
 
-        Mockito.when(mockUserRepository.findUsers(any(), any())).thenReturn(getResponse());
+        Mockito.when(mockUserRepository.findUsers(any(Page.class), any(Sort.class))).thenReturn(getResponse());
 
         given()
                 .headers(HttpHeaders.AUTHORIZATION, generateAdminToken())

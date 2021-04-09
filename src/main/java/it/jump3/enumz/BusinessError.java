@@ -23,6 +23,7 @@ public enum BusinessError {
 
     IB_404_USER(4041),
     IB_404_ROLE(4042),
+    IB_404_FILE(4043),
 
     IB_409_USER(4091),
 

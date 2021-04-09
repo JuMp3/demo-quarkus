@@ -13,7 +13,7 @@ import javax.ws.rs.core.Response;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.Matchers.greaterThan;
+//import static org.hamcrest.Matchers.greaterThan;
 import static org.mockito.ArgumentMatchers.any;
 
 @QuarkusTest
@@ -41,7 +41,7 @@ public class QuarkusDemoTest {
         User user = new User();
         user.setUsername("test");
 
-        Mockito.when(mockUserRepository.findByUsername(any())).thenReturn(user);
+        Mockito.when(mockUserRepository.findByUsername(any(String.class))).thenReturn(user);
         Assertions.assertEquals("test", mockUserRepository.findByUsername("pippo").getUsername());
     }
 

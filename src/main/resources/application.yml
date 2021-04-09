@@ -58,6 +58,8 @@ jwt:
     time:
       minutes: 10
 
+file:
+  retention-days: 30
 #quarkus.resteasy.path: /api
 #quarkus.servlet.context-path: /api
 
@@ -70,11 +72,19 @@ jwt:
         driver: org.postgresql.Driver
       username: postgres
       password: mysecretpassword
+  file:
+    root-folder: /work/quarkus/nfs
 
-#"%dev":
+"%dev":
 #  quarkus:
 #    http:
 #      port: 8081
+  file:
+    root-folder: /work/quarkus/nfs
+
+"%prod":
+  file:
+    root-folder: /files
 
 display:
   mach: 3
