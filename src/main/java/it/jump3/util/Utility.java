@@ -343,6 +343,6 @@ public class Utility {
             }
             //return LocaleUtils.toLocale(s);
         }
-        return null;
+        return Locale.getDefault();
     }
 }

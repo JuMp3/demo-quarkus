@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>{item.getName()}</title>
+</head>
+<body>
+<!--    <h1>{item.getName()}</h1>-->
+    <h2>{msg:hello_name(item.getName())}</h2>
+    <div>Price: {item.getPrice()}</div>
+    {#if item.getPrice() > 100}
+        <div>Discounted Price: {item.discountedPrice}</div>
+    {/if}
+</body>
+</html>

@@ -16,10 +16,12 @@ You can run your application in dev mode that enables live coding using:
 >with the ENV var; example:
 >
 >URL_DB=hostname:port/postgres <br />
- USERNAME_DB=postgres <br />
- PASSWORD_DB=******** <br />
- SECRET_JWT=***** <br />
- ISSUER_JWT=quarkus-demo <br />
+>USERNAME_DB=postgres <br />
+>PASSWORD_DB=******** <br />
+>SECRET_JWT=***** <br />
+>ISSUER_JWT=quarkus-demo <br />
+>SERVICE_TOKEN=<service_token> <br />
+>BITLY_TOKEN=***** <br />
 
 For tracing function, you have to run in local a Jaeger instance; you can use docker for this purpose:
 ```shell script
@@ -47,9 +49,10 @@ For now, I have implemented the following features:
 - JWY/custom authentication (with check roles)
 - Test (WIP), also for secured API
 - REST Client for call 3rd-party API
+- Use resteasy-multipart for upload/download file
+- Template with i18n messages (Qute)
 
 Coming soon:
-- Use resteasy-multipart for upload file
 - i18n messages
 
 ## Packaging and running the application

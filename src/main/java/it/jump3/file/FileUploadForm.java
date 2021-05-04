@@ -8,7 +8,6 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.core.MediaType;
-import java.io.InputStream;
 import java.io.Serializable;
 
 @NoArgsConstructor

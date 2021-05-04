@@ -11,7 +11,8 @@ import javax.ws.rs.core.Application;
 @OpenAPIDefinition(
         tags = {
                 @Tag(name = "user", description = "Users API"),
-                @Tag(name = "config", description = "Configs API")
+                @Tag(name = "config", description = "Configs API"),
+                @Tag(name = "login", description = "Login API")
         },
         info = @Info(
                 title = "Demo Quarkus API",
